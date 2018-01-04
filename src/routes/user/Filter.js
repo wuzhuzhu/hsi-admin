@@ -36,7 +36,9 @@ const Filter = ({
   const handleFields = (fields) => {
     const { createTime } = fields
     if (createTime.length) {
-      fields.createTime = [createTime[0].format('YYYY-MM-DD'), createTime[1].format('YYYY-MM-DD')]
+      // fields.createTime = [createTime[0].format('YYYY-MM-DD'), createTime[1].format('YYYY-MM-DD')]
+      fields.startDate = createTime[0].format('YYYY-MM-DD')
+      fields.endDate = createTime[1].format('YYYY-MM-DD')
     }
     return fields
   }
@@ -80,7 +82,7 @@ const Filter = ({
 
   return (
     <Row gutter={24}>
-      <Col {...ColProps} xl={{ span: 4 }} md={{ span: 8 }}>
+      {/* <Col {...ColProps} xl={{ span: 4 }} md={{ span: 8 }}>
         {getFieldDecorator('name', { initialValue: name })(<Search placeholder="Search Name" onSearch={handleSubmit} />)}
       </Col>
       <Col {...ColProps} xl={{ span: 4 }} md={{ span: 8 }}>
@@ -90,21 +92,21 @@ const Filter = ({
           placeholder="Please pick an address"
           onChange={handleChange.bind(null, 'address')}
         />)}
-      </Col>
+      </Col> */}
       <Col {...ColProps} xl={{ span: 6 }} md={{ span: 8 }} sm={{ span: 12 }}>
-        <FilterItem label="Createtime">
+        <FilterItem label="创建时间">
           {getFieldDecorator('createTime', { initialValue: initialCreateTime })(<RangePicker style={{ width: '100%' }} onChange={handleChange.bind(null, 'createTime')} />)}
         </FilterItem>
       </Col>
       <Col {...TwoColProps} xl={{ span: 10 }} md={{ span: 24 }} sm={{ span: 24 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
           <div>
-            <Button type="primary" className="margin-right" onClick={handleSubmit}>Search</Button>
-            <Button onClick={handleReset}>Reset</Button>
+            <Button type="primary" className="margin-right" onClick={handleSubmit}>搜索</Button>
+            <Button onClick={handleReset}>重置</Button>
           </div>
           <div className="flex-vertical-center">
-            <Switch className="ant-switch-large" style={{ marginRight: 16 }} defaultChecked={isMotion} onChange={switchIsMotion} checkedChildren="Motion" unCheckedChildren="Motion" />
-            <Button type="ghost" onClick={onAdd}>Create</Button>
+            {/* <Switch className="ant-switch-large" style={{ marginRight: 16 }} defaultChecked={isMotion} onChange={switchIsMotion} checkedChildren="Motion" unCheckedChildren="Motion" /> */}
+            <Button type="ghost" onClick={onAdd}>创建</Button>
           </div>
         </div>
       </Col>

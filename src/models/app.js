@@ -8,6 +8,9 @@ import { EnumRoleType } from 'enums'
 import { query, logout } from 'services/app'
 import * as menusService from 'services/menus'
 import queryString from 'query-string'
+import { get } from 'lodash'
+
+import { list } from '../constants/menu'
 
 const { prefix } = config
 
@@ -61,27 +64,27 @@ export default {
 
   },
   effects: {
-
     * query ({
       payload,
     }, { call, put, select }) {
-      const { success, user } = yield call(query, payload)
       const { locationPathname } = yield select(_ => _.app)
-      if (success && user) {
-        const { list } = yield call(menusService.query)
-        const { permissions } = user
+      const user = payload && payload.user
+      if (user) {
+        const role = get(user, 'attributes.role')
         let menu = list
-        if (permissions.role === EnumRoleType.ADMIN || permissions.role === EnumRoleType.DEVELOPER) {
+        let permissions = []
+        if (role === EnumRoleType.ADMIN || role === EnumRoleType.DEVELOPER) {
           permissions.visit = list.map(item => item.id)
         } else {
-          menu = list.filter((item) => {
+          // 只有是admin才能进这一步，这里暂时到不了
+          /* menu = list.filter((item) => {
             const cases = [
               permissions.visit.includes(item.id),
               item.mpid ? permissions.visit.includes(item.mpid) || item.mpid === '-1' : true,
               item.bpid ? permissions.visit.includes(item.bpid) : true,
             ]
             return cases.every(_ => _)
-          })
+          }) */
         }
         yield put({
           type: 'updateState',

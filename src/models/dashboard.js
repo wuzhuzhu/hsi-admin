@@ -3,6 +3,7 @@ import modelExtend from 'dva-model-extend'
 import { query } from 'services/dashboard'
 import { model } from 'models/common'
 import * as weatherService from 'services/weather'
+import { queryCount } from 'services/users'
 
 export default modelExtend(model, {
   namespace: 'dashboard',
@@ -13,6 +14,7 @@ export default modelExtend(model, {
       name: '晴',
       icon: '//s5.sencdn.com/web/icons/3d_50/2.png',
     },
+    asqAmount: 0,
     sales: [],
     quote: {
       avatar: 'http://img.hb.aicdn.com/bc442cf0cc6f7940dcc567e465048d1a8d634493198c4-sPx5BR_fw236',
@@ -32,12 +34,20 @@ export default modelExtend(model, {
       history.listen(({ pathname }) => {
         if (pathname === '/dashboard' || pathname === '/') {
           dispatch({ type: 'query' })
+          dispatch({ type: 'queryAsqCount' })
           dispatch({ type: 'queryWeather' })
         }
       })
     },
   },
   effects: {
+    * queryAsqCount (action, { call, put }) {
+      const asqAmount = yield call(queryCount)
+      yield put({
+        type: 'updateState',
+        payload: { asqAmount },
+      })
+    },
     * query ({
       payload,
     }, { call, put }) {

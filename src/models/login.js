@@ -1,5 +1,8 @@
 import { routerRedux } from 'dva/router'
 import { login } from 'services/login'
+import AV from 'leancloud-storage'
+import { isEmpty, get } from 'lodash'
+import { EnumRoleType } from 'enums'
 
 export default {
   namespace: 'login',
@@ -8,20 +11,28 @@ export default {
 
   effects: {
     * login ({
-      payload,
+      payload: {
+        password,
+        username,
+      },
     }, { put, call, select }) {
-      const data = yield call(login, payload)
-      const { locationQuery } = yield select(_ => _.app)
-      if (data.success) {
-        const { from } = locationQuery
-        yield put({ type: 'app/query' })
-        if (from && from !== '/login') {
-          yield put(routerRedux.push(from))
+      try {
+        const loginedUser = yield AV.User.logIn(username, password)
+        const { locationQuery } = yield select(_ => _.app)
+        if (!isEmpty(loginedUser) &&
+          get(loginedUser, 'attributes.role') === EnumRoleType.ADMIN) {
+          const { from } = locationQuery
+          yield put({ type: 'app/query', payload: { user: loginedUser } })
+          if (from && from !== '/login' && from !== '/') {
+            yield put(routerRedux.push(from))
+          } else {
+            yield put(routerRedux.push('/dashboard'))
+          }
         } else {
-          yield put(routerRedux.push('/dashboard'))
+          throw loginedUser
         }
-      } else {
-        throw data
+      } catch (err) {
+        throw err
       }
     },
   },

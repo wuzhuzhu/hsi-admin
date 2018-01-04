@@ -90,14 +90,10 @@ const User = ({
       ...query,
     },
     onFilterChange (value) {
-      dispatch(routerRedux.push({
-        pathname: location.pathname,
-        search: queryString.stringify({
-          ...value,
-          page: 1,
-          pageSize,
-        }),
-      }))
+      dispatch({
+        type: 'user/query',
+        payload: value,
+      })
     },
     onSearch (fieldsValue) {
       fieldsValue.keyword.length ? dispatch(routerRedux.push({
@@ -139,9 +135,9 @@ const User = ({
         selectedRowKeys.length > 0 &&
         <Row style={{ marginBottom: 24, textAlign: 'right', fontSize: 13 }}>
           <Col>
-            {`Selected ${selectedRowKeys.length} items `}
+            {`选择了 ${selectedRowKeys.length} 项 `}
             <Popconfirm title="Are you sure delete these items?" placement="left" onConfirm={handleDeleteItems}>
-              <Button type="primary" style={{ marginLeft: 8 }}>Remove</Button>
+              <Button type="primary" style={{ marginLeft: 8 }}>删除</Button>
             </Popconfirm>
           </Col>
         </Row>

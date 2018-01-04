@@ -5,12 +5,23 @@ import classnames from 'classnames'
 import { DropOption } from 'components'
 import { Link } from 'react-router-dom'
 import queryString from 'query-string'
+import { keyBy, get } from 'lodash'
+
 import AnimTableBody from 'components/DataTable/AnimTableBody'
 import styles from './List.less'
+import QUESTIONSMAP from '../../constants/questions'
+import CARDMAP from '../../constants/cards'
+
+const PARSED_SKINMAP = keyBy(QUESTIONSMAP.skin, 'value')
+const PARSED_BODYMAP = keyBy(QUESTIONSMAP.body, 'value')
+const PARSED_FACIALMAP = keyBy(QUESTIONSMAP.facial, 'value')
+const PARSED_CARDMAP = keyBy(CARDMAP, 'value')
 
 const confirm = Modal.confirm
 
-const List = ({ onDeleteItem, onEditItem, isMotion, location, ...tableProps }) => {
+const List = ({
+  onDeleteItem, onEditItem, isMotion, location, ...tableProps
+}) => {
   location.query = queryString.parse(location.search)
 
   const handleMenuClick = (record, e) => {
@@ -28,48 +39,62 @@ const List = ({ onDeleteItem, onEditItem, isMotion, location, ...tableProps }) =
 
   const columns = [
     {
-      title: 'Avatar',
-      dataIndex: 'avatar',
-      key: 'avatar',
-      width: 64,
-      className: styles.avatar,
-      render: text => <img alt={'avatar'} width={24} src={text} />,
-    }, {
-      title: 'Name',
-      dataIndex: 'name',
+      title: '姓名',
+      dataIndex: 'attributes.name',
       key: 'name',
       render: (text, record) => <Link to={`user/${record.id}`}>{text}</Link>,
     }, {
-      title: 'NickName',
-      dataIndex: 'nickName',
-      key: 'nickName',
+      title: '生日',
+      dataIndex: 'attributes.birthDate',
+      key: 'birthDate',
+      render: (text, record) => `${text.getFullYear()}/${text.getMonth() + 1}/${text.getDate()}`,
     }, {
-      title: 'Age',
-      dataIndex: 'age',
-      key: 'age',
+      title: '性别',
+      dataIndex: 'attributes.gender',
+      key: 'gender',
+      render: text => (<span>{text === 'female'
+        ? '女'
+        : '男'}</span>),
     }, {
-      title: 'Gender',
-      dataIndex: 'isMale',
-      key: 'isMale',
-      render: text => (<span>{text
-        ? 'Male'
-        : 'Female'}</span>),
-    }, {
-      title: 'Phone',
-      dataIndex: 'phone',
+      title: '手机号',
+      dataIndex: 'attributes.phone',
       key: 'phone',
     }, {
-      title: 'Email',
-      dataIndex: 'email',
-      key: 'email',
+      title: '面部',
+      dataIndex: 'attributes.facial',
+      key: 'facial',
+      render: text => (
+        <span>{text && text.map((t) => {
+          return get(PARSED_FACIALMAP, `${t}.label`)
+        }).join(',')}</span>
+      ),
     }, {
-      title: 'Address',
-      dataIndex: 'address',
-      key: 'address',
+      title: '皮肤',
+      dataIndex: 'attributes.skin',
+      key: 'skin',
+      render: text => (
+        <span>{text && text.map((t) => {
+          return get(PARSED_SKINMAP, `${t}.label`)
+        }).join(',')}</span>
+      ),
     }, {
-      title: 'CreateTime',
-      dataIndex: 'createTime',
-      key: 'createTime',
+      title: '身体',
+      dataIndex: 'attributes.body',
+      key: 'body',
+      render: text => (
+        <span>{text && text.map((t) => {
+          return get(PARSED_BODYMAP, `${t}.label`)
+        }).join(',')}</span>
+      ),
+    }, {
+      title: '办卡意向',
+      dataIndex: 'attributes.card',
+      key: 'card',
+      render: text => (
+        <span>{text && text.map((t) => {
+          return get(PARSED_CARDMAP, `${t}.name`)
+        }).join(',')}</span>
+      ),
     }, {
       title: 'Operation',
       key: 'operation',
@@ -98,6 +123,7 @@ const List = ({ onDeleteItem, onEditItem, isMotion, location, ...tableProps }) =
         simple
         rowKey={record => record.id}
         getBodyWrapper={getBodyWrapper}
+        pagination={false}
       />
     </div>
   )
