@@ -45,6 +45,7 @@ const List = ({ ...tableProps }) => {
         scroll={{ x: 1200 }}
         columns={columns}
         simple
+        pagination={false}
         className={styles.table}
         rowKey={record => record.id}
       />

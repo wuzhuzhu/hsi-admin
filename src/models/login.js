@@ -32,6 +32,7 @@ export default {
           throw loginedUser
         }
       } catch (err) {
+        console.log(err)
         throw err
       }
     },

@@ -8,7 +8,7 @@ export const list = [
   {
     id: '2',
     bpid: '1',
-    name: '客户',
+    name: '问卷',
     icon: 'user',
     route: '/user',
   },
@@ -18,5 +18,12 @@ export const list = [
     bpid: '2',
     name: '客户详情',
     route: '/user/:id',
+  },
+  {
+    id: '3',
+    bpid: '1',
+    name: '客户',
+    icon: 'heart-o',
+    route: '/client',
   },
 ]

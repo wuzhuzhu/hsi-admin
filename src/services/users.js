@@ -4,9 +4,10 @@ import AV from 'leancloud-storage'
 const { api } = config
 const { users } = api
 
-export async function query ({ startDate, endDate }) {
+export async function query (params) {
   let asqQuery
-  if (startDate && endDate) {
+  if (params && params.startDate && params.endDate) {
+    const { startDate, endDate } = params
     const startDateQuery = new AV.Query('Asq')
     startDateQuery.greaterThanOrEqualTo('createdAt', new Date(startDate))
 

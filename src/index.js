@@ -26,6 +26,23 @@ app.router(require('./router'))
 app.start('#root')
 
 // 7. leanCloud
-const appId = 'ryBVDeMNRKzgGigb09UT7OnC-gzGzoHsz'
-const appKey = 'oSWB9ovSDQREP2QaqB637WnS'
+const appId = 'stncnWHr9xXbmo0EblewFqbv-gzGzoHsz'
+const appKey = 'm6Dd3V7eMGLGuGRaFkOCwKUF'
 AV.init({ appId, appKey })
+
+/*
+// 新建 AVUser 对象实例
+var user = new AV.User();
+// 设置用户名
+user.setUsername('hci');
+// 设置密码
+user.setPassword('hcibeauty');
+// 设置邮箱
+user.setEmail('764591090@qq.com');
+user.signUp().then(function (loginedUser) {
+  console.log(loginedUser);
+}, function (error) {
+  console.log(error)
+});
+*/
+
