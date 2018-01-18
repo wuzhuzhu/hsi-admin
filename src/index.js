@@ -4,6 +4,10 @@ import createLoading from 'dva-loading'
 import createHistory from 'history/createBrowserHistory'
 import 'babel-polyfill'
 import AV from 'leancloud-storage'
+import moment from 'moment'
+
+import 'moment/locale/zh-cn'
+
 
 // 1. Initialize
 const app = dva({
@@ -29,6 +33,8 @@ app.start('#root')
 const appId = 'stncnWHr9xXbmo0EblewFqbv-gzGzoHsz'
 const appKey = 'm6Dd3V7eMGLGuGRaFkOCwKUF'
 AV.init({ appId, appKey })
+
+moment.locale('zh-cn')
 
 /*
 // 新建 AVUser 对象实例

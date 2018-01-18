@@ -65,30 +65,58 @@ function getBasicInput (type = '', getFieldDecorator, item, typeName) {
             initialValue: item[`age${type}`],
             rules: [
               {
-                // required: true,
+                required: !(type || typeName),
                 type: 'number',
               },
             ],
           })(<InputNumber min={18} max={100} />)}
         </FormItem>
       </Col>
+      <Col span={8}>
+        <FormItem label={`${typeName}属相`} hasFeedback {...getFormItemLayout(3)}>
+          {getFieldDecorator(`cZodiac${type}`, {
+            initialValue: item[`cZodiac${type}`],
+            rules: [
+              {
+                required: !(type || typeName),
+              },
+            ],
+          })(<Input />)}
+        </FormItem>
+      </Col>
+      <Col span={8}>
+        <FormItem label={`${typeName}星座`} hasFeedback {...getFormItemLayout(3)}>
+          {getFieldDecorator(`constellation${type}`, {
+            initialValue: item[`constellation${type}`],
+            rules: [
+              {
+                required: !(type || typeName),
+              },
+            ],
+          })(<Input />)}
+        </FormItem>
+      </Col>
+      <Col span={8}>
+        <FormItem label={`${typeName}血型`} hasFeedback {...getFormItemLayout(3)}>
+          {getFieldDecorator(`bloodType${type}`, {
+            initialValue: item[`bloodType${type}`],
+            rules: [
+              {
+                required: !(type || typeName),
+              },
+            ],
+          })(<Select>
+            <Option value="O">O</Option>
+            <Option value="A">A</Option>
+            <Option value="B">B</Option>
+            <Option value="AB">AB</Option>
+            <Option value="other">其他</Option>
+          </Select>)}
+        </FormItem>
+      </Col>
     </Row>
     {typeName && type && <div>
       <Row>
-        <Col span={8}>
-          <FormItem label={`${typeName}属相`} hasFeedback {...getFormItemLayout(3)}>
-            {getFieldDecorator(`cZodiac${type}`, {
-              initialValue: item[`cZodiac${type}`],
-            })(<Input />)}
-          </FormItem>
-        </Col>
-        <Col span={8}>
-          <FormItem label={`${typeName}星座`} hasFeedback {...getFormItemLayout(3)}>
-            {getFieldDecorator(`constellation${type}`, {
-              initialValue: item[`constellation${type}`],
-            })(<Input />)}
-          </FormItem>
-        </Col>
         <Col span={8}>
           <FormItem label={`${typeName}性格`} hasFeedback {...getFormItemLayout(3)}>
             {getFieldDecorator(`charactor${type}`, {
@@ -127,8 +155,6 @@ const modal = ({
         ...getFieldsValue(),
         key: item.key,
       }
-      data.address = isArray(data.address) && data.address.join(' ')
-      console.log(data)
       onOk(data)
     })
   }
@@ -175,16 +201,19 @@ const modal = ({
             </FormItem>
           </Col>
           <Col span={12}>
-            <FormItem label="血型" hasFeedback {...getFormItemLayout(2)}>
-              {getFieldDecorator('bloodType', {
-                initialValue: item.bloodType,
-              })(<Select>
-                <Option value="O">O</Option>
-                <Option value="A">A</Option>
-                <Option value="B">B</Option>
-                <Option value="AB">AB</Option>
-                <Option value="other">其他</Option>
-              </Select>)}
+            <FormItem label="顾客类型" hasFeedback {...getFormItemLayout(2)}>
+              {getFieldDecorator('isNewCustomer', {
+                initialValue: item.isNewCustomer,
+                rules: [
+                  {
+                    type: 'boolean',
+                    required: true,
+                  },
+                ],
+              })(<Radio.Group>
+                <Radio value>新顾客</Radio>
+                <Radio value={false}>老顾客</Radio>
+              </Radio.Group>)}
             </FormItem>
           </Col>
         </Row>
@@ -193,6 +222,11 @@ const modal = ({
             <FormItem label="负责美容师" hasFeedback {...getFormItemLayout(3)}>
               {getFieldDecorator('cosmetologist', {
                 initialValue: item.cosmetologist,
+                rules: [
+                  {
+                    required: true,
+                  },
+                ],
               })(<Input />)}
             </FormItem>
           </Col>
@@ -214,6 +248,11 @@ const modal = ({
             <FormItem label="负责市场老师" hasFeedback {...getFormItemLayout(2)}>
               {getFieldDecorator('marketing', {
                 initialValue: item.marketing,
+                rules: [
+                  {
+                    required: true,
+                  },
+                ],
               })(<Input />)}
             </FormItem>
           </Col>
@@ -223,6 +262,11 @@ const modal = ({
             <FormItem label="职业" hasFeedback {...getFormItemLayout(3)}>
               {getFieldDecorator('profession', {
                 initialValue: item.profession,
+                rules: [
+                  {
+                    required: true,
+                  },
+                ],
               })(<Select>
                 <Option value="owner">私营企业主</Option>
                 <Option value="civilServant">国企/公务员</Option>
@@ -237,6 +281,11 @@ const modal = ({
             <FormItem label="婚姻" hasFeedback {...getFormItemLayout(3)}>
               {getFieldDecorator('marriage', {
                 initialValue: item.marriage,
+                rules: [
+                  {
+                    required: true,
+                  },
+                ],
               })(<Select>
                 <Option value="married">已婚</Option>
                 <Option value="divorced">离异</Option>
@@ -272,27 +321,13 @@ const modal = ({
         {getBasicInput('child', getFieldDecorator, item, '子女')}
         <Row>
           <Col span={12}>
-            <FormItem label="顾客类型" hasFeedback {...getFormItemLayout(2)}>
-              {getFieldDecorator('isNewCustomer', {
-                initialValue: item.isNewCustomer,
-                rules: [
-                  {
-                    type: 'boolean',
-                  },
-                ],
-              })(<Radio.Group>
-                <Radio value>新顾客</Radio>
-                <Radio value={false}>老顾客</Radio>
-              </Radio.Group>)}
-            </FormItem>
-          </Col>
-          <Col span={12}>
             <FormItem label="在店月数" hasFeedback {...getFormItemLayout(2)}>
               {getFieldDecorator('period', {
                 initialValue: item.period,
                 rules: [
                   {
                     type: 'number',
+                    required: true,
                   },
                 ],
               })(<InputNumber min={0} />)}
@@ -301,24 +336,26 @@ const modal = ({
         </Row>
         <Row>
           <Col span={12}>
-            <FormItem label="月度消费" hasFeedback {...getFormItemLayout(2)}>
+            <FormItem label="月度消费(万)" hasFeedback {...getFormItemLayout(2)}>
               {getFieldDecorator('monthlyRate', {
                 initialValue: item.monthlyRate,
                 rules: [
                   {
                     type: 'number',
+                    required: true,
                   },
                 ],
               })(<InputNumber min={0} />)}
             </FormItem>
           </Col>
           <Col span={12}>
-            <FormItem label="年度消费" hasFeedback {...getFormItemLayout(2)}>
+            <FormItem label="年度消费(万)" hasFeedback {...getFormItemLayout(2)}>
               {getFieldDecorator('yearlyRate', {
                 initialValue: item.yearlyRate,
                 rules: [
                   {
                     type: 'number',
+                    required: true,
                   },
                 ],
               })(<InputNumber min={0} />)}
@@ -327,24 +364,26 @@ const modal = ({
         </Row>
         <Row>
           <Col span={12}>
-            <FormItem label="单次最高消费" hasFeedback {...getFormItemLayout(2)}>
+            <FormItem label="单次最高消费(万)" hasFeedback {...getFormItemLayout(2)}>
               {getFieldDecorator('maxRate', {
                 initialValue: item.maxRate,
                 rules: [
                   {
                     type: 'number',
+                    required: true,
                   },
                 ],
               })(<InputNumber min={0} />)}
             </FormItem>
           </Col>
           <Col span={12}>
-            <FormItem label="每月来访数" hasFeedback {...getFormItemLayout(2)}>
+            <FormItem label="到店频次/月" hasFeedback {...getFormItemLayout(2)}>
               {getFieldDecorator('visitCount', {
                 initialValue: item.visitCount,
                 rules: [
                   {
                     type: 'number',
+                    required: true,
                   },
                 ],
               })(<InputNumber min={0} />)}
@@ -407,7 +446,18 @@ const modal = ({
             <FormItem label="销售方式" hasFeedback {...getFormItemLayout(3)}>
               {getFieldDecorator('saleWay', {
                 initialValue: item.saleWay,
-              })(<Input />)}
+                rules: [
+                  {
+                    required: true,
+                  },
+                ],
+              })(<Select>
+                <Option value="objective">专业理性</Option>
+                <Option value="sensitive">尊贵感性</Option>
+                <Option value="human">温情人性</Option>
+                <Option value="cheap">爱占便宜</Option>
+                <Option value="other">其他</Option>
+              </Select>)}
             </FormItem>
           </Col>
           <Col span={8}>
@@ -430,6 +480,11 @@ const modal = ({
             <FormItem label="最关注问题" hasFeedback {...getFormItemLayout(2)}>
               {getFieldDecorator('mostConcerned', {
                 initialValue: item.mostConcerned,
+                rules: [
+                  {
+                    required: true,
+                  },
+                ],
               })(<Input />)}
             </FormItem>
           </Col>
@@ -437,11 +492,16 @@ const modal = ({
             <FormItem label="身体状况" hasFeedback {...getFormItemLayout(2)}>
               {getFieldDecorator('health', {
                 initialValue: item.health,
-              })(<Input placeholder="健康/一般/很差（说明病理）" />)}
+              })(<Select>
+                <Option value="good">健康</Option>
+                <Option value="common">一般</Option>
+                <Option value="bad">很差</Option>
+                <Option value="reason">病理</Option>
+              </Select>)}
             </FormItem>
           </Col>
         </Row>
-        <FormItem label="今年曾体检" hasFeedback {...formItemLayout}>
+        <FormItem label="一年内是否在国内三甲医院体检" hasFeedback labelCol={{ span: 7 }} wrapperCol={{ span: 17 }}>
           {getFieldDecorator('medExam', {
             initialValue: item.medExam,
             rules: [{
@@ -471,6 +531,11 @@ const modal = ({
             <FormItem label="理想效果" hasFeedback {...getFormItemLayout(3)}>
               {getFieldDecorator('goal', {
                 initialValue: item.goal,
+                rules: [
+                  {
+                    required: true,
+                  },
+                ],
               })(<Input placeholder="客户最想达到的理想效果" />)}
             </FormItem>
           </Col>
@@ -480,14 +545,27 @@ const modal = ({
             <FormItem label="高端项目使用" hasFeedback {...getFormItemLayout(2)}>
               {getFieldDecorator('hiProjects', {
                 initialValue: item.hiProjects,
-              })(<Input placeholder="干细胞/HIGH/人体胎盘素/光电仪器/面雕/荷尔蒙" />)}
+              })(<Select>
+                <Option value="stemcells">干细胞</Option>
+                <Option value="high">HIGH</Option>
+                <Option value="placentin">人体胎盘素</Option>
+                <Option value="elec">光电仪器</Option>
+                <Option value="hormone">荷尔蒙</Option>
+                <Option value="carvings">面雕</Option>
+              </Select>)}
             </FormItem>
           </Col>
           <Col span={12}>
             <FormItem label="高端保健品" hasFeedback {...getFormItemLayout(2)}>
               {getFieldDecorator('hiProd', {
                 initialValue: item.hiProd,
-              })(<Input placeholder="酵素/玛卡/SOD/胶原蛋白/花青素" />)}
+              })(<Select>
+                <Option value="enzymes">酵素</Option>
+                <Option value="maca">玛卡</Option>
+                <Option value="sod">SOD</Option>
+                <Option value="collagen">胶原蛋白</Option>
+                <Option value="anthocyanin">花青素</Option>
+              </Select>)}
             </FormItem>
           </Col>
         </Row>
@@ -496,6 +574,11 @@ const modal = ({
             <FormItem label="铺垫项目" hasFeedback {...getFormItemLayout(3)}>
               {getFieldDecorator('preProj', {
                 initialValue: item.preProj,
+                rules: [
+                  {
+                    required: true,
+                  },
+                ],
               })(<Input />)}
             </FormItem>
           </Col>
@@ -503,13 +586,23 @@ const modal = ({
             <FormItem label="铺垫专家" hasFeedback {...getFormItemLayout(3)}>
               {getFieldDecorator('preProfessor', {
                 initialValue: item.preProfessor,
+                rules: [
+                  {
+                    required: true,
+                  },
+                ],
               })(<Input />)}
             </FormItem>
           </Col>
           <Col span={8}>
-            <FormItem label="铺垫价格" hasFeedback {...getFormItemLayout(3)}>
+            <FormItem label="铺垫价格(万)" hasFeedback {...getFormItemLayout(3)}>
               {getFieldDecorator('prePrice', {
                 initialValue: item.prePrice,
+                rules: [
+                  {
+                    required: true,
+                  },
+                ],
               })(<Input />)}
             </FormItem>
           </Col>
@@ -535,6 +628,11 @@ const modal = ({
             <FormItem label="经济自主权" hasFeedback {...getFormItemLayout(2)}>
               {getFieldDecorator('spendRight', {
                 initialValue: item.spendRight,
+                rules: [
+                  {
+                    required: true,
+                  },
+                ],
               })(<Select>
                 <Option value="full">完全自主</Option>
                 <Option value="half">部分自住</Option>
@@ -592,6 +690,11 @@ const modal = ({
             <FormItem label="消费类型" hasFeedback {...getFormItemLayout(2)}>
               {getFieldDecorator('consumingType', {
                 initialValue: item.consumingType,
+                rules: [
+                  {
+                    required: true,
+                  },
+                ],
               })(<Select>
                 <Option value="institute">冲动型</Option>
                 <Option value="objective">理智型</Option>
@@ -644,7 +747,7 @@ const modal = ({
       </Row>
       <Row>
         <Col span={8}>
-          <FormItem label="私房钱" hasFeedback {...getFormItemLayout(3)}>
+          <FormItem label="私房钱(万)" hasFeedback {...getFormItemLayout(3)}>
             {getFieldDecorator('personalMoney', {
               initialValue: item.personalMoney,
               rules: [
@@ -656,7 +759,7 @@ const modal = ({
           </FormItem>
         </Col>
         <Col span={8}>
-          <FormItem label="家族财产" hasFeedback {...getFormItemLayout(3)}>
+          <FormItem label="家族财产(万)" hasFeedback {...getFormItemLayout(3)}>
             {getFieldDecorator('familyProperty', {
               initialValue: item.familyProperty,
               rules: [
@@ -668,7 +771,7 @@ const modal = ({
           </FormItem>
         </Col>
         <Col span={8}>
-          <FormItem label="铺垫出国带钱" hasFeedback {...getFormItemLayout(3)}>
+          <FormItem label="铺垫出国带钱(万)" hasFeedback {...getFormItemLayout(3)}>
             {getFieldDecorator('preAbordMoney', {
               initialValue: item.preAbordMoney,
               rules: [
@@ -682,36 +785,39 @@ const modal = ({
       </Row>
       <Row>
         <Col span={8}>
-          <FormItem label="2月店内消费" hasFeedback {...getFormItemLayout(3)}>
+          <FormItem label="两月内店内消费(万)" hasFeedback labelCol={{ span: 15 }} wrapperCol={{ span: 6 }}>
             {getFieldDecorator('twoMonthInStore', {
               initialValue: item.twoMonthInStore,
               rules: [
                 {
                   type: 'number',
+                  required: true,
                 },
               ],
             })(<InputNumber min={0} />)}
           </FormItem>
         </Col>
         <Col span={8}>
-          <FormItem label="2月其他消费" hasFeedback {...getFormItemLayout(3)}>
+          <FormItem label="两月内其他消费(万)" hasFeedback labelCol={{ span: 15 }} wrapperCol={{ span: 6 }}>
             {getFieldDecorator('twoMonthOther', {
               initialValue: item.twoMonthOther,
               rules: [
                 {
                   type: 'number',
+                  required: true,
                 },
               ],
             })(<InputNumber min={0} />)}
           </FormItem>
         </Col>
         <Col span={8}>
-          <FormItem label="2月大额消费" hasFeedback {...getFormItemLayout(3)}>
+          <FormItem label="两月内大额消费(万)" hasFeedback labelCol={{ span: 15 }} wrapperCol={{ span: 6 }}>
             {getFieldDecorator('twoMonthJumbo', {
               initialValue: item.twoMonthJumbo,
               rules: [
                 {
                   type: 'number',
+                  required: true,
                 },
               ],
             })(<InputNumber min={0} />)}
@@ -780,8 +886,21 @@ const modal = ({
             </Radio.Group>)}
           </FormItem>
         </Col>
-      </Row>
-      <Row>
+        <Col span={8}>
+          <FormItem label="孕妇顾客" hasFeedback {...getFormItemLayout(3)}>
+            {getFieldDecorator('pregnent', {
+              initialValue: item.pregnent,
+              rules: [
+                {
+                  type: 'boolean',
+                },
+              ],
+            })(<Radio.Group>
+              <Radio value>是</Radio>
+              <Radio value={false}>否</Radio>
+            </Radio.Group>)}
+          </FormItem>
+        </Col>
         <Col span={8}>
           <FormItem label="医生顾客" hasFeedback {...getFormItemLayout(3)}>
             {getFieldDecorator('isDoc', {
@@ -827,8 +946,6 @@ const modal = ({
             </Radio.Group>)}
           </FormItem>
         </Col>
-      </Row>
-      <Row>
         <Col span={8}>
           <FormItem label="有男陪同" hasFeedback {...getFormItemLayout(3)}>
             {getFieldDecorator('withBoy', {
@@ -901,7 +1018,7 @@ const modal = ({
           </FormItem>
         </Col>
         <Col span={8}>
-          <FormItem label="店成交率" hasFeedback {...getFormItemLayout(3)}>
+          <FormItem label="店成交百分率" hasFeedback {...getFormItemLayout(3)}>
             {getFieldDecorator('dealPerc', {
               initialValue: item.dealPerc,
               rules: [
@@ -909,7 +1026,7 @@ const modal = ({
                   type: 'number',
                 },
               ],
-            })(<InputNumber min={0} />)}
+            })(<InputNumber min={0} max={100} />)}
           </FormItem>
         </Col>
       </Row>
@@ -918,6 +1035,11 @@ const modal = ({
           <FormItem label="申报店" hasFeedback {...getFormItemLayout(3)}>
             {getFieldDecorator('shop', {
               initialValue: item.shop,
+              rules: [
+                {
+                  required: true,
+                },
+              ],
             })(<Input />)}
           </FormItem>
         </Col>

@@ -45,11 +45,11 @@ const List = ({
       render: (text, record) => <Link to={`user/${record.id}`}>{text}</Link>,
     }, {
       title: '性别',
-      dataIndex: 'attributes.gender',
-      key: 'gender',
-      render: text => (<span>{text === 'female'
-        ? '女'
-        : '男'}</span>),
+      dataIndex: 'attributes.isMale',
+      key: 'isMale',
+      render: text => (<span>{text
+        ? '男'
+        : '女'}</span>),
     }, {
       title: '手机号',
       dataIndex: 'attributes.phone',
@@ -59,15 +59,18 @@ const List = ({
       dataIndex: 'attributes.shop',
       key: 'shop',
     }, {
-      title: '在店月数',
-      dataIndex: 'attributes.period',
-      key: 'period',
+      title: '类型',
+      dataIndex: 'attributes.isNewCustomer',
+      key: 'isNewCustomer',
+      render: text => (<span>{text
+        ? '新'
+        : '老'}</span>),
     }, {
       title: '电子邮件',
       dataIndex: 'attributes.email',
       key: 'email',
     }, {
-      title: 'Operation',
+      title: '操作',
       key: 'operation',
       width: 100,
       render: (text, record) => {
