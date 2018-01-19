@@ -7,6 +7,7 @@ import { isArray } from 'lodash'
 const FormItem = Form.Item
 const Option = Select.Option
 const CheckboxGroup = Checkbox.Group
+const { TextArea } = Input
 
 const formItemLayout = {
   labelCol: {
@@ -1072,6 +1073,14 @@ const modal = ({
           </FormItem>
         </Col>
       </Row>
+      <Row>
+
+      </Row>
+      <FormItem label="备注" hasFeedback {...formItemLayout}>
+        {getFieldDecorator('memo', {
+          initialValue: item.memo,
+        })(<TextArea rows={3} />)}
+      </FormItem>
     </Modal>
   )
 }
